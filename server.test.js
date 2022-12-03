@@ -7,17 +7,21 @@ it('Call the /youtube endpoint', async () => {
     try {
         const res = await request.get('/youtube')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Hello, youtube indonesia!')
+        expect(res.text).toBe('Hello, youtube in')
     } catch (err) {
     }
 });
 it('Call the / endpoint', async() => {
-    try {
-        const res = await request.get('/')
+    // try {
+    //     const res = await request.get('/')
+    //     expect(res.status).toBe(200)
+    //     expect(res.text).toBe('This App is running properly!')
+    // } catch (err) {
+    // }
+    const res = await request
+    .get('/')
         expect(res.status).toBe(200)
         expect(res.text).toBe('This App is running properly!')
-    } catch (err) {
-    }
 })
 it('Call the /pong endpoint', async() => {
     try {
