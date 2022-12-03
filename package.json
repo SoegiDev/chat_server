@@ -1,0 +1,26 @@
+{
+  "name": "chat_server",
+  "version": "1.0.0",
+  "description": "Chat Server With MongoDB",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "keywords": [
+    "node",
+    "js",
+    "mongodb",
+    "socket.io"
+  ],
+  "author": "Soegidev",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "supertest": "^6.3.2"
+  }
+}
