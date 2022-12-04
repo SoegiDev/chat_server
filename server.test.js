@@ -7,7 +7,7 @@ it('Call the /youtube endpoint', async () => {
     try {
         const res = await request.get('/youtube')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Hello, youtube indonesia! Fajar Soegi')
+        expect(res.text).toBe('Hello, youtube indonesia! Fajar Soegi Hallo Good Morning Test Hei')
     } catch (err) {
     }
 });
@@ -21,13 +21,13 @@ it('Call the / endpoint', async() => {
     const res = await request
     .get('/')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('This App is running properly!')
+        expect(res.text).toBe('This App is running properly! TESTING')
 })
 it('Call the /pong endpoint', async() => {
     try {
         const res = await request.get('/ping')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Pong!')
+        expect(res.text).toBe('Pong! Soegidev')
     } catch (err) {
     }
 })
@@ -39,4 +39,11 @@ it('Call the /hello/:name endpoint', async() => {
     } catch (err) {
     }
 })
-  
+it('Call the /say endpoint', async() => {
+    try {
+        const res = await request.get('/say')
+        expect(res.status).toBe(200)
+        expect(res.text).toBe('Say! Soegidev HAI')
+    } catch (err) {
+    }
+})
