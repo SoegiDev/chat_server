@@ -47,3 +47,12 @@ it('Call the /say endpoint', async() => {
     } catch (err) {
     }
 })
+
+it('Call the /zas endpoint', async() => {
+    try {
+        const res = await request.get('/zas')
+        expect(res.status).toBe(200)
+        expect(res.text).toBe('Hallo! Zhafran')
+    } catch (err) {
+    }
+})
