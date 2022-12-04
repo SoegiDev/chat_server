@@ -43,7 +43,7 @@ it('Call the /say endpoint', async() => {
     try {
         const res = await request.get('/say')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Say! Soegidev')
+        expect(res.text).toBe('Say! Soegidev HAI')
     } catch (err) {
     }
 })
