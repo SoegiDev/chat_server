@@ -7,7 +7,7 @@ it('Call the /youtube endpoint', async () => {
     try {
         const res = await request.get('/youtube')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Hello, youtube indonesia! Fajar Soegi')
+        expect(res.text).toBe('Hello, youtube indonesia! Fajar Soegi Hallo Good Morning')
     } catch (err) {
     }
 });
