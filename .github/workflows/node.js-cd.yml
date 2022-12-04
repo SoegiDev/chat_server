@@ -26,6 +26,7 @@ jobs:
            key: ${{ secrets.PRIVATE_KEY }}
            port: 22
            script: |
+            sudo su
              cd /home/apps/chat_server
              git pull origin main
              git status
