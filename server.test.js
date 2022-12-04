@@ -27,7 +27,7 @@ it('Call the /pong endpoint', async() => {
     try {
         const res = await request.get('/ping')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Pong!')
+        expect(res.text).toBe('Pong! Soegidev')
     } catch (err) {
     }
 })
