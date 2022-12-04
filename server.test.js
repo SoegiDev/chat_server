@@ -39,4 +39,11 @@ it('Call the /hello/:name endpoint', async() => {
     } catch (err) {
     }
 })
-  
+it('Call the /say endpoint', async() => {
+    try {
+        const res = await request.get('/say')
+        expect(res.status).toBe(200)
+        expect(res.text).toBe('Say! Soegidev')
+    } catch (err) {
+    }
+})
