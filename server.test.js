@@ -21,7 +21,7 @@ it('Call the / endpoint', async() => {
     const res = await request
     .get('/')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('This App is running properly!')
+        expect(res.text).toBe('This App is running properly! TESTING')
 })
 it('Call the /pong endpoint', async() => {
     try {
