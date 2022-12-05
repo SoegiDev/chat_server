@@ -38,7 +38,7 @@ mongoose
   }
 
 app.get("/test", (_req, res) =>  {
-    res.status(200).send("Test Hello world")
+    res.status(200).send("Test Hello world Fajar")
 })
 app.use("/api/auth", authRoutes);
 app.use("/api/messages", messageRoutes);
