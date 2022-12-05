@@ -39,7 +39,7 @@ it('Call the /test endpoint', async () => {
     try {
         const res = await request.get('/test')
         expect(res.status).toBe(200)
-        expect(res.text).toBe('Test Hello world')
+        expect(res.text).toBe('Test Hello world Fajar')
     } catch (err) {
     }
 });
