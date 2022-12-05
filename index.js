@@ -1,4 +1,6 @@
 // const server = require('./server')
+const cluster = require('cluster');
+const cCPUs = require('os').cpus().length;
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
@@ -13,11 +15,8 @@ require("dotenv").config();
 const crypto = require("crypto");
 const randomId = () => crypto.randomBytes(8).toString("hex");
 const bodyParser = require('body-parser');
-app.use(bodyParser.json({ limit: '10mb' }));
-app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
-app.use(cors());
-app.use(express.json());
 
+let server
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
@@ -37,16 +36,34 @@ mongoose
     app.use(express.errorHandler());
   }
 
-app.get("/test", (_req, res) =>  {
-    res.status(200).send("Test Hello world Fajar")
-})
-app.use("/api/auth", authRoutes);
-app.use("/api/messages", messageRoutes);
-app.use("/api/channels", channelRoutes);
-
-const server = app.listen(process.env.PORT, () =>
-  console.log(`Server started on ${process.env.PORT}`)
-);
+  if (cluster.isMaster) {
+    // Create a worker for each CPU
+    for (let i = 0; i < cCPUs; i++) {
+        cluster.fork();
+    }
+    cluster.on('online', function (worker) {
+        console.log('Worker ' + worker.process.pid + ' is online.');
+    });
+    cluster.on('exit', function (worker, code, signal) {
+        console.log('worker ' + worker.process.pid + ' died.');
+    });
+} else {
+    app.use(bodyParser.json({ limit: '10mb' }));
+    app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
+    app.use(cors());
+    app.use(express.json());
+    app.get("/test", (_req, res) =>  {
+      res.status(200).send("Test Hello world Fajar")
+    })
+    app.use("/api/auth", authRoutes);
+    app.use("/api/messages", messageRoutes);
+    app.use("/api/channels", channelRoutes);
+    
+    server = app.listen(process.env.PORT, () =>
+      console.log(`Server started on ${process.env.PORT}`)
+    );
+    
+}
 
 const io = socket(server, {
     cors: {
