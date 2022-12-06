@@ -34,16 +34,6 @@ jobs:
            envs: PORT,MONGO_URL,TZ,AWS_BUCKET_NAME,AWS_ACCESS_KEY,AWS_SECRET_KEY
            script: |
              cd /home/apps/chat_server/
-             sudo rm -rf .env
-             #sudo touch .env
-             #sudo chmod 777 .env
-             #sudo echo PORT=$PORT >> .env
-             #sudo echo MONGO_URL=$MONGO_URL >> .env
-             #sudo echo TZ=$TZ >> .env
-             #sudo echo AWS_BUCKET_NAME=$AWS_BUCKET_NAME >> .env
-             #sudo echo AWS_BUCKET_REGION='' >> .env
-             #sudo echo AWS_ACCESS_KEY=$AWS_ACCESS_KEY >> .env
-             #sudo echo AWS_SECRET_KEY=$AWS_SECRET_KEY >> .env
              sudo git pull origin main
              sudo git status
              sudo npm install --only=prod
