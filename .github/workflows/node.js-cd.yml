@@ -19,7 +19,6 @@ jobs:
       MONGO_URL: ${{ secrets.MONGO_URL }}
       TZ: ${{ secrets.TZ }}
       AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
-      AWS_BUCKET_REGION: ''
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_KEY: ${{ secrets.AWS_SECRET_KEY }}
     # Steps represent a sequence of tasks that will be executed as part of the job
@@ -42,11 +41,9 @@ jobs:
              sudo echo MONGO_URL=$MONGO_URL >> .env
              sudo echo TZ=$TZ >> .env
              sudo echo AWS_BUCKET_NAME=$AWS_BUCKET_NAME >> .env
-             sudo echo AWS_BUCKET_REGION=$AWS_BUCKET_REGION >> .env
+             sudo echo AWS_BUCKET_REGION='' >> .env
              sudo echo AWS_ACCESS_KEY=$AWS_ACCESS_KEY >> .env
              sudo echo AWS_SECRET_KEY=$AWS_SECRET_KEY >> .env
-             sudo rm -rf .env.development.local
-             sudo rm -rf .env.production.local
              sudo git pull origin main
              sudo git status
              sudo npm install --only=prod
