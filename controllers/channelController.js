@@ -56,7 +56,8 @@ module.exports.addMember = async (req, res, next) => {
     try {
       const { name } = req.body;
       const channelId = req.params.id;
-      const usernameCheck = await User.findOne({ username:name });
+      const usernameCheck = await User.findOne( {username: username},
+        {pin: username});
       if (!usernameCheck)return res.json({ msg: "Member tidak ditemukan ",success:false });
       console.log(channelId)
       var update = {
