@@ -4,7 +4,7 @@
   "description": "Chat Server With MongoDB",
   "main": "index.js",
   "scripts": {
-    "start:dev":"nodemon index.js --mode development",
+    "start:dev":"set NODE_ENV=development && node index.js",
     "start": "node index.js",
     "test": "jest --forceExit",
     "test:watch": "jest --watch"
