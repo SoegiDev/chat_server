@@ -57,8 +57,8 @@ module.exports.addMember = async (req, res, next) => {
       const { name } = req.body;
       const channelId = req.params.id;
       const usernameCheck = await User.findOne({$or: [
-        {username: username},
-        {pin: username}
+        {username: name},
+        {pin: name}
         ]});
       if (!usernameCheck)return res.json({ msg: "Member tidak ditemukan ",success:false });
       console.log(channelId)
