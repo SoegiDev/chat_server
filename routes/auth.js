@@ -7,7 +7,8 @@ const {
   logOut,
   updateConnected,
   addFriends,
-  getFriendsMandatory
+  getFriendsMandatory,
+  addDevices
 } = require("../controllers/userController");
 
 const router = require("express").Router();
@@ -21,5 +22,6 @@ router.post("/setavatar/:id", setAvatar);
 router.get("/logout/:id", logOut);
 router.post("/update_connect/:id", updateConnected);
 router.post("/add_friend/:id", addFriends);
+router.post("/add_device/:id", addDevices);
 
 module.exports = router;

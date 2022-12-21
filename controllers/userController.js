@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const bcrypt = require("bcrypt");
 const crypto = require("crypto");
+const mongoose = require('mongoose');
 
 const n = crypto.randomInt(0, 1000000);
 var milliseconds = new Date().getTime().toString(); 
@@ -10,17 +11,29 @@ function  generatePIN (length) {
 }
 module.exports.login = async (req, res, next) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, device } = req.body;
     const user = await User.findOne({ username });
-    if (!user)
+    if (!user){
       return res.json({ msg: "Incorrect Username or Password", status: false });
+    }
     const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid)
+    if (!isPasswordValid){
       return res.json({ msg: "Incorrect Username or Password", status: false });
-    if(user.connected)
-      return res.json({ msg: "Your Account already connect from another Platform", status: false });
-    delete user.password;
-    return res.json({ status: true, user });
+    }
+    if(user.devices.length > 0){
+      user.devices.forEach(function(obj){
+        if( obj.device.browser === device.browser && obj.device.version === device.version && obj.device.os === device.os){
+          delete user.password;
+          return res.json({ status: true, user });
+        }else{
+          return res.json({ msg: "Your Account already Exist from another Browser "+obj.device.browser+" versi : "+obj.device.version+" os : "+obj.device.os, status: false });
+        }
+      })
+    }
+    else{
+      delete user.password;
+      return res.json({ status: true, user });
+    }
   } catch (ex) {
     next(ex);
   }
@@ -135,9 +148,25 @@ module.exports.setAvatar = async (req, res, next) => {
 module.exports.logOut = (req, res, next) => {
   try {
     if (!req.params.id) return res.json({ msg: "User id is required " });
-      User.findOneAndUpdate(req.params.id, {connected:false}, {
-      new: true
-    });
+    let arrayDevices = []
+    const user = User.findOne({ _id:req.params.id });
+    if(user.devices.length > 0){
+      user.devices.forEach(function(obj){
+      arrayDevices.push(obj._id);
+      User.findByIdAndUpdate({ _id:req.params.id }, {
+        $pull: {
+            devices: { _id: obj._id }
+        }
+      }, { new: true });
+      })
+    }
+    var update = {
+      connected:false
+    }
+      User.findOneAndUpdate(
+        req.params.id,
+        update, 
+        {new: true});
     return res.status(200).send();
   } catch (ex) {
     next(ex);
@@ -180,6 +209,26 @@ module.exports.addFriends = async (req, res, next) => {
       { new: true }
     );
     return res.json({ msg:"Teman berhasil di Add",status: true, userData });
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.addDevices = async (req, res, next) => {
+  try {
+    const {device} = req.body;
+    const userId = req.params.id;
+
+    var update = {
+      $addToSet: { devices: { _id: new mongoose.Types.ObjectId(), device:device } }
+    }
+    const updateDevice = await User.findByIdAndUpdate(
+      userId,
+      update,
+      { new: true }
+    );
+    const user = await User.findOne({ userId });
+    return res.json({ msg:"Device berhasil di Add",status: true, user });
   } catch (ex) {
     next(ex);
   }
