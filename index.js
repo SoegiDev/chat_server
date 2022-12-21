@@ -16,6 +16,7 @@ const crypto = require("crypto");
 const randomId = () => crypto.randomBytes(8).toString("hex");
 const bodyParser = require('body-parser');
 
+// SWITCH MONGODB URL
 let server
 mongoose
   .connect(process.env.MONGO_URL, {
