@@ -17,6 +17,7 @@ jobs:
     env:
       PORT_SERVER: ${{ secrets.PORT_SERVER }}
       MONGO_URL: ${{ secrets.MONGO_URL }}
+      #Switch MongoURL SERVER DB
       TIMEZONE_TZ: ${{ secrets.TZ }}
       AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
       AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
