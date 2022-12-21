@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       PORT_SERVER: ${{ secrets.PORT_SERVER }}
-      MONGO_URL: ${{ secrets.MONGO_URL }}
+      MONGO_URL: ${{ secrets.MONGO_URL_DB_NEW }}
       #Switch MongoURL SERVER DB
       TIMEZONE_TZ: ${{ secrets.TZ }}
       AWS_BUCKET_NAME: ${{ secrets.AWS_BUCKET_NAME }}
