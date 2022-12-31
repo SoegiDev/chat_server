@@ -8,7 +8,9 @@ const {
   updateConnected,
   addFriends,
   getFriendsMandatory,
-  addDevices
+  addDevices,
+  removeDevice,
+  getDevices
 } = require("../controllers/userController");
 
 const router = require("express").Router();
@@ -19,9 +21,11 @@ router.get("/allusers/:id", getAllUsers);
 router.get("/allfriends/:id", getAllFriends);
 router.get("/friendsmandatory/:id", getFriendsMandatory);
 router.post("/setavatar/:id", setAvatar);
-router.get("/logout/:id", logOut);
+router.post("/logout/:id/:device", logOut);
+router.post("/remove_device/:id/:device", removeDevice);
 router.post("/update_connect/:id", updateConnected);
 router.post("/add_friend/:id", addFriends);
 router.post("/add_device/:id", addDevices);
+router.get("/get_device/:id", getDevices);
 
 module.exports = router;

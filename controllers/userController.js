@@ -9,10 +9,25 @@ const randomID = n+milliseconds
 function  generatePIN (length) {
   return Math.floor(Math.pow(10, length-1)+ Math.random() * (Math.pow(10, length) - randomID.substring(randomID.length-4) - 1));
 }
+
+module.exports.getDevices = async(req, res, next)=>{
+  try {
+    const user = await User.findOne({ _id:req.params.id });
+    if(user.devices.length > 0){
+      user.devices.forEach(function(obj){
+          return res.json({ status: true,device:user.devices });
+        })
+    }else{
+      return res.json({ msg: "Not Detection Device", status: false });
+    }
+  } catch (ex) {
+    next(ex);
+  }
+};
 module.exports.login = async (req, res, next) => {
   try {
     const { username, password, device } = req.body;
-    const user = await User.findOne({ username });
+    const user = await User.findOne({ username:username });
     if (!user){
       return res.json({ msg: "Incorrect Username or Password", status: false });
     }
@@ -24,15 +39,24 @@ module.exports.login = async (req, res, next) => {
       user.devices.forEach(function(obj){
         if( obj.device.browser === device.browser && obj.device.version === device.version && obj.device.os === device.os){
           delete user.password;
-          return res.json({ status: true, user });
+          return res.json({ status: true,user:user });
         }else{
-          return res.json({ msg: "Your Account already Exist from another Browser "+obj.device.browser+" versi : "+obj.device.version+" os : "+obj.device.os, status: false });
+          return res.json({user:user, msg: "Your Account already Exist from another Browser "+obj.device.browser+" versi : "+obj.device.version+" os : "+obj.device.os, status: false,device:obj });
         }
       })
     }
     else{
+      var update = {
+        $addToSet: { devices: { _id: new mongoose.Types.ObjectId(), device:device } }
+      }
+      const updateDevice = await User.findByIdAndUpdate(
+        {_id:user._id},
+        update,
+        { new: true }
+      );
       delete user.password;
-      return res.json({ status: true, user });
+      const updateUser = await User.findOne({ username:username });
+      return res.json({ status: true, user:updateUser });
     }
   } catch (ex) {
     next(ex);
@@ -42,10 +66,10 @@ module.exports.login = async (req, res, next) => {
 module.exports.register = async (req, res, next) => {
   try {
     const { username, email, password, gender } = req.body;
-    const usernameCheck = await User.findOne({ username });
+    const usernameCheck = await User.findOne({ username:username });
     if (usernameCheck)
       return res.json({ msg: "Username already used", status: false });
-    const emailCheck = await User.findOne({ email });
+    const emailCheck = await User.findOne({ email:email });
     if (emailCheck)
       return res.json({ msg: "Email already used", status: false });
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -129,7 +153,7 @@ module.exports.setAvatar = async (req, res, next) => {
     const userId = req.params.id;
     const avatarImage = req.body.image;
     const userData = await User.findByIdAndUpdate(
-      userId,
+      {_id:userId},
       {
         isAvatarImageSet: true,
         avatarImage,
@@ -145,29 +169,18 @@ module.exports.setAvatar = async (req, res, next) => {
   }
 };
 
-module.exports.logOut = (req, res, next) => {
+module.exports.logOut = async (req, res, next) => {
   try {
     if (!req.params.id) return res.json({ msg: "User id is required " });
-    let arrayDevices = []
-    const user = User.findOne({ _id:req.params.id });
-    if(user.devices.length > 0){
-      user.devices.forEach(function(obj){
-      arrayDevices.push(obj._id);
-      User.findByIdAndUpdate({ _id:req.params.id }, {
-        $pull: {
-            devices: { _id: obj._id }
-        }
-      }, { new: true });
-      })
-    }
-    var update = {
-      connected:false
-    }
-      User.findOneAndUpdate(
-        req.params.id,
-        update, 
-        {new: true});
-    return res.status(200).send();
+    const userId = req.params.id;
+
+    const deleted = await User.findByIdAndUpdate ( 
+      { "_id" : req.params.id} , 
+      { "$pull" : { devices :  {_id: mongoose.Types.ObjectId(req.params.device) } }},
+      { new: true }
+    )
+    console.log(deleted)
+    return res.status(200).send({"device":deleted});
   } catch (ex) {
     next(ex);
   }
@@ -175,7 +188,7 @@ module.exports.logOut = (req, res, next) => {
 
 module.exports.updateConnected = (req, res, next) => {
   try {
-    User.findByIdAndUpdate(req.params.id, 
+    User.findByIdAndUpdate({_id:req.params.id}, 
       {connected:req.body.status_connect}, function(err, data) {
           if(err){
             res.status(400).send(err);
@@ -204,7 +217,7 @@ module.exports.addFriends = async (req, res, next) => {
       $addToSet: { friends: { _id: usernameCheck._id, chatUpdatedAt:new Date(),type: 'private', block:false } }
     }
     const userData = await User.findByIdAndUpdate(
-      userId,
+      {_id:userId},
       update,
       { new: true }
     );
@@ -218,17 +231,33 @@ module.exports.addDevices = async (req, res, next) => {
   try {
     const {device} = req.body;
     const userId = req.params.id;
-
     var update = {
       $addToSet: { devices: { _id: new mongoose.Types.ObjectId(), device:device } }
     }
     const updateDevice = await User.findByIdAndUpdate(
-      userId,
+      {_id:userId},
       update,
       { new: true }
     );
-    const user = await User.findOne({ userId });
-    return res.json({ msg:"Device berhasil di Add",status: true, user });
+    const userData = await User.findOne({ _id:userId });
+    return res.json({ msg:"Device berhasil di Add",status: true, user:userData });
+  } catch (ex) {
+    next(ex);
+  }
+};
+
+module.exports.removeDevice = async (req, res, next) => {
+  try {
+    if (!req.params.id) return res.json({ msg: "User id is required " });
+    const userId = req.params.id;
+
+    const deleted = await User.findByIdAndUpdate ( 
+      { "_id" : req.params.id} , 
+      { "$pull" : { devices :  {_id: mongoose.Types.ObjectId(req.params.device) } }},
+      { new: true }
+    )
+    console.log(deleted)
+    return res.status(200).send({user:deleted,status: true});
   } catch (ex) {
     next(ex);
   }
