@@ -10,6 +10,7 @@ const channelRoutes = require("./routes/channels");
 const Channel = require("./models/channelModel");
 const User = require("./models/userModel");
 const app = express();
+const useragent = require('express-useragent');
 const socket = require("socket.io");
 require("dotenv").config();
 const crypto = require("crypto");
@@ -53,8 +54,12 @@ mongoose
     app.use(bodyParser.urlencoded({ extended: true, limit: '10mb' }));
     app.use(cors());
     app.use(express.json());
+    app.use(useragent.express());
     app.get("/test", (_req, res) =>  {
       res.status(200).send("Test Hello world Fajar")
+    })
+    app.get("/device", (_req, res) =>  {
+      res.status(200).json(_req.useragent)
     })
     app.use("/api/auth", authRoutes);
     app.use("/api/messages", messageRoutes);
