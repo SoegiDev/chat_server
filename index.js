@@ -153,6 +153,5 @@ const io = socket(server, {
       console.log("JOINING ROOM",room)
       socket.join(room);
     });
-  
   });
   
