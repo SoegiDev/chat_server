@@ -19,6 +19,7 @@ const bodyParser = require('body-parser');
 
 // SWITCH MONGODB URL
 let server
+mongoose.set("strictQuery", false);
 mongoose
   .connect(process.env.MONGO_URL, {
     useNewUrlParser: true,
