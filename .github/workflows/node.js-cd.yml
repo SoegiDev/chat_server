@@ -34,18 +34,18 @@ jobs:
            port: 22
            envs: PORT_SERVER,MONGO_URL,TIMEZONE_TZ,AWS_BUCKET_NAME,AWS_ACCESS_KEY,AWS_SECRET_KEY
            script: |
-             cd /home/apps/chat_server
-             sudo rm .env
-             sudo touch .env
-             sudo chmod 777 .env
-             sudo echo PORT=$PORT_SERVER >> .env
-             sudo echo MONGO_URL=$MONGO_URL >> .env
-             sudo echo TZ=$TIMEZONE_TZ >> .env
-             sudo echo AWS_BUCKET_NAME=$AWS_BUCKET_NAME >> .env
-             sudo echo AWS_BUCKET_REGION='' >> .env
-             sudo echo AWS_ACCESS_KEY=$AWS_ACCESS_KEY >> .env
-             sudo echo AWS_SECRET_KEY=$AWS_SECRET_KEY >> .env
-             sudo git pull origin main
-             sudo git status
-             sudo npm install --only=prod
-             sudo pm2 restart chat_server_node
+             cd ~/apps/chat_server
+             rm .env
+             touch .env
+             chmod 777 .env
+             echo PORT=$PORT_SERVER >> .env
+             echo MONGO_URL=$MONGO_URL >> .env
+             echo TZ=$TIMEZONE_TZ >> .env
+             echo AWS_BUCKET_NAME=$AWS_BUCKET_NAME >> .env
+             echo AWS_BUCKET_REGION='' >> .env
+             echo AWS_ACCESS_KEY=$AWS_ACCESS_KEY >> .env
+             echo AWS_SECRET_KEY=$AWS_SECRET_KEY >> .env
+             git pull origin main
+             git status
+             npm install --only=prod
+             pm2 restart chat_server_node
