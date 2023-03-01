@@ -2,12 +2,12 @@
 const S3 = require("aws-sdk/clients/s3");
 const fs = require("fs");
 const bucketName = "chatimage2022";
-const path = "chatimage2022"
-const folder = "image_chat"
+const path = "zx16"
+const folder = "chatimage2022"
 const region = "";
-const accessKeyId = "X2SL8IYOBBRLGIM0ISUI";
-const S3_ENDPOINT_URL="https://is3.cloudhost.id/"
-const secretAccessKey = "zGaWUJ2ToAvIAhEfNS6DvPlWDaPdJyiCqws0hpWf";
+const accessKeyId = "DO00JZA2WMEFT8E47QEF";
+const S3_ENDPOINT_URL="https://zx16.sgp1.digitaloceanspaces.com"
+const secretAccessKey = "uKY93aeBGGMgOYYCOY2PfZgjK3/PVBk1vsmFD4TdQ6M";
 const s3 = new S3({
     apiVersion: 'latest',
     endpoint: `${S3_ENDPOINT_URL}${path}`,

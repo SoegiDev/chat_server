@@ -75,9 +75,9 @@ module.exports.register = async (req, res, next) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     avatarImage = null
     if (gender === "male"){
-      avatarImage ="https://is3.cloudhost.id/chatimage2022/image_chat/1669781522131-male_avatar.jpg"
+      avatarImage ="https://zx16.sgp1.digitaloceanspaces.com/chatimage2022/male_avatar.jpg"
     }else{
-      avatarImage="https://is3.cloudhost.id/chatimage2022/image_chat/1669781543257-femal_avatar.jpg"
+      avatarImage="https://zx16.sgp1.digitaloceanspaces.com/chatimage2022/female_avatar.jpg"
     }
     const user = await User.create({
       pin:generatePIN(6),
